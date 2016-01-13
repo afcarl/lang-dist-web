@@ -10,7 +10,7 @@ import sys
 sys.path.append('/auto/nlg-05/deri/gazetteer')
 import iso_codes.parse_language_codes
 from collections import defaultdict
-import numpy as np
+# import numpy as np
 
 
 DIST_ATTR_LIST = sorted(

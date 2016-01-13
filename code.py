@@ -117,7 +117,7 @@ class index:
         if same_alph:
             command.append('--same_alph')
         if print_all:
-            command.append('-print_all')
+            command.append('--print_all')
 
         print ' '.join(command)
         p1 = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)

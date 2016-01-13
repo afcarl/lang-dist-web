@@ -1,0 +1,16 @@
+$def with (form, result)
+
+<form name="main" method="post"> 
+$if not form.valid: <p class="error">Try again!</p>
+$:form.render()
+</form>
+<!--$:result-->
+<table>
+$ larger = 3
+$for c in result:
+    <tr class="$loop.parity">
+    $for d in c:
+        <td width="150">$d</td>
+    </tr>
+</table>
+

@@ -10,7 +10,22 @@ sys.path.append('/')
 from calc_lang_lang_dist import get_feat_attr_list, get_dist_attr_list
 from iso_codes import parse_language_codes
 
-LANG_DISTS_FILE = 'lang.dists'
+LANG_DISTS_FILE = '/users/aderi/lang.dists'
+
+extra_wiki_to_lang = {'bat-smg': 'Samogitian',
+                      'be-x-old': 'Old Belarusian',
+		              'cbk-zam': 'Zamboanga Chavacano',
+                      'eml': 'Emilian-Romagnol',
+                    'fiu-vro': 'Võro',
+                  'map-bms': 'Banyumasan Basa', 'mo': 'Moldovan', 'nah': 'Nahuatl',
+                        'nds-nl': 'Dutch Low Saxon',
+                      'roa-rup': 'Aromanian',
+                    'roa-tara': 'Tarantino',
+              'simple': 'Simple English',
+                    'zh-classical': 'Classical Chinese',
+         'zh-min-nan': 'Min Nan',
+          'zh-yue':'Cantonese'
+		      }
 
 getVar = lambda searchList, ind: [searchList[i] for i in ind]
 
@@ -162,9 +177,13 @@ if __name__ == '__main__':
         names_to_print += [k for k, v in dist_and_feat_to_index.items() if v == i]
 
     for i, line in enumerate(top_output):
-        top_output[i].insert(2, parse_language_codes.find_lang_for_code(line[1]))
+        lang_name = parse_language_codes.find_lang_for_code(line[1])
+        if lang_name is None:
+            lang_name = extra_wiki_to_lang[line[1]]
+        top_output[i].insert(2, lang_name)
     names_to_print.insert(2, 'name')
     top_output.insert(0, names_to_print)
+
 
     for line in top_output:
         print('\t'.join(line))

@@ -8,16 +8,18 @@ __author__ = 'aderi'
 import sys
 
 sys.path.append('/auto/nlg-05/deri/gazetteer')
+sys.path.append('/')
 try:
     from unicode.unicode_stats import ScriptsInfo, fancy_print, get_script_as_features, get_script_to_pared_chars, \
-        get_pared_down_chars_as_features, get_lang_to_pared_char_set, get_lang_to_pared_char_set_short, get_lang_script_info
+    get_pared_down_chars_as_features, get_lang_to_pared_char_set, get_lang_to_pared_char_set_short, get_lang_script_info
 except ImportError:
     pass
+
 import iso_codes.parse_language_codes
 from collections import defaultdict
-import numpy as np
 
 try:
+    import numpy as np
     import scipy.spatial.distance
     from ipa.phoneme_features import get_lang_phoneme_set
 except ImportError:
@@ -489,11 +491,29 @@ def compute_phoible_similarity(lang1, lang2, phoneme_set1, phoneme_set2, phoneme
 
 def get_phoible_similarity_unchanged():
 
-    with open('phonetics.dists', 'r') as phonetic_dist_file:
+    with open('phonetic.dists', 'r') as phonetic_dist_file:
+        phonetic_dist_file.readline()
         for line in phonetic_dist_file:
             code1, code2, dist = line.rstrip().split('\t')
             dist = float(dist)
             code_to_code_to_scorestruct[code1][code2].set_dist('phonetic', dist)
+
+def add_unchanged(code1, code2, dist_name, dist):
+    if dist != 'None':
+        dist = float(dist)
+        code_to_code_to_scorestruct[code1][code2].set_dist(dist_name, dist)
+
+def load_uriel_unchanged():
+    with open('uriel.dists.clean', 'r') as uriel_dist_file:
+        uriel_dist_file.readline()
+        for line in uriel_dist_file:
+            code1, code2, u_avg, u_composite, u_genetic , u_geo, u_p, u_s = line.rstrip().split('\t')
+            add_unchanged(code1, code2, 'u_avg', u_avg)
+            add_unchanged(code1, code2, 'u_composite', u_composite)
+            add_unchanged(code1, code2, 'u_genetic', u_genetic)
+            add_unchanged(code1, code2, 'u_geo', u_geo)
+            add_unchanged(code1, code2, 'u_p', u_p)
+            add_unchanged(code1, code2, 'u_s', u_s)
 
 
 def get_phoible_similarity():
@@ -540,7 +560,8 @@ def get_phoible_similarity():
 
 def get_lang_dists():
     """metrics"""
-    load_uriel()
+    # load_uriel()
+    load_uriel_unchanged()
 
     print('got named entity counts')
     get_lang_pared_char_sets_dists()

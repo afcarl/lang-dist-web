@@ -495,8 +495,9 @@ def get_phoible_similarity_unchanged():
         phonetic_dist_file.readline()
         for line in phonetic_dist_file:
             code1, code2, dist = line.rstrip().split('\t')
-            dist = float(dist)
-            code_to_code_to_scorestruct[code1][code2].set_dist('phonetic', dist)
+            if dist != 'None':
+                dist = float(dist)
+                code_to_code_to_scorestruct[code1][code2].set_dist('phonetic', dist)
 
 def add_unchanged(code1, code2, dist_name, dist):
     if dist != 'None':

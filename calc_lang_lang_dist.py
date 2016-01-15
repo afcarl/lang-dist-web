@@ -8,17 +8,21 @@ __author__ = 'aderi'
 import sys
 
 sys.path.append('/auto/nlg-05/deri/gazetteer')
+from unicode.unicode_stats import ScriptsInfo, fancy_print, get_script_as_features, get_script_to_pared_chars, \
+    get_pared_down_chars_as_features, get_lang_to_pared_char_set, get_lang_to_pared_char_set_short, get_lang_script_info
 import iso_codes.parse_language_codes
 from collections import defaultdict
-# import numpy as np
+import numpy as np
+import scipy.spatial.distance
+from ipa.phoneme_features import get_lang_phoneme_set
 
 
 DIST_ATTR_LIST = sorted(
-    ['u_composite', 'u_genetic', 'u_geo', 'u_p', 'u_s', 'avg', 'scripts', 'u_avg', 'unicode_chars', 'phoible_sim'])
+    ['u_composite', 'u_genetic', 'u_geo', 'u_p', 'u_s', 'avg', 'u_avg', 'transliterable', 'phonetic'])
 FEAT_ATTR_LIST = sorted(['same_alph', 'named_entity_count', 'wiki', 'europarl'])
 DISTS_FILE = 'lang.dists'
 
-SCRIPT_DIST_ATTR_LIST = sorted(['avg', 'unicode_chars'])
+SCRIPT_DIST_ATTR_LIST = sorted(['avg', 'transliterable'])
 SCRIPT_FEAT_ATTR_LIST = sorted(['named_entity_count'])
 SCRIPT_DISTS_FILE = 'script.dists'
 
@@ -197,15 +201,13 @@ def load_uriel(iso_set=None):
 
                     # if i > 5:
                     # break
-
+        # break
     avg_dict('u_avg')
     # print_dict()
 
 
-def get_omniglot_scripts():
-    global omniglot_iso_code_to_scripts_info, all_scripts, omniglot_scripts_file, line, x, primary, secondary, \
-        omniglot_iso_code_to_script_features, iso_code_0, scripts_feat_0, iso_code_1, scripts_feat_1, \
-        scripts_0, scripts_1
+def get_omniglot_iso_code_to_scripts_info():
+    global all_scripts, omniglot_scripts_file, line, x, primary, secondary
     omniglot_iso_code_to_scripts_info = defaultdict(ScriptsInfo)
     all_scripts = set()
     with open('/auto/nlg-05/deri/gazetteer/unicode/omniglot.scripts') as omniglot_scripts_file:
@@ -216,6 +218,14 @@ def get_omniglot_scripts():
             omniglot_iso_code_to_scripts_info[line[0]] = ScriptsInfo(primary, secondary)
             all_scripts = all_scripts.union(primary)
             all_scripts = all_scripts.union(secondary)
+    return omniglot_iso_code_to_scripts_info
+
+
+def get_omniglot_scripts():
+    global all_scripts, omniglot_scripts_file, line, x, primary, secondary, \
+        omniglot_iso_code_to_script_features, iso_code_0, scripts_feat_0, iso_code_1, scripts_feat_1, \
+        scripts_0, scripts_1
+    omniglot_iso_code_to_scripts_info = get_omniglot_iso_code_to_scripts_info()
     omniglot_iso_code_to_script_features = get_script_as_features(omniglot_iso_code_to_scripts_info, all_scripts)
     for iso_code_0, scripts_feat_0 in sorted(omniglot_iso_code_to_script_features.items()):
         if iso_code_0 not in code_to_code_to_scorestruct:
@@ -249,13 +259,18 @@ def get_europarl_iso_codes():
     return europarl_codes
 
 
-def get_named_entity_counts(code_to_code_to_scorestruct):
+def get_code_to_ne_counts():
     code_to_ne_counts = defaultdict(int)
     with open('/home/nlg-05/deri/gazetteer/lang_lang_dist/counts.uniq', 'r') as counts_file:
         for line in counts_file:
             count, iso_code = line.rstrip().split()
             count = int(count)
             code_to_ne_counts[iso_code] = count
+    return code_to_ne_counts
+
+
+def get_named_entity_counts(code_to_code_to_scorestruct):
+    code_to_ne_counts = get_code_to_ne_counts()
 
     for code1 in code_to_code_to_scorestruct:
         for code2 in code_to_code_to_scorestruct[code1]:
@@ -297,12 +312,23 @@ def get_script_unicode_dists():
             cos_dist = scipy.spatial.distance.cosine(char_features1, char_features2)
             if 'e' in str(cos_dist):
                 cos_dist = 0.0
-            script_to_script_to_scorestruct[script1][script2].set_dist('unicode_chars', cos_dist)
+            script_to_script_to_scorestruct[script1][script2].set_dist('transliterable', cos_dist)
 
 
 def get_lang_pared_char_sets_dists():
     lang_to_pared_char_set, lang_to_char_set, all_pared_chars = get_lang_to_pared_char_set_short()
+
+    code_to_ne_counts = get_code_to_ne_counts()
+
+    """remove codes with very little data"""
+    for code, ne_count in code_to_ne_counts.items():
+        if ne_count < 500:
+            lang_to_pared_char_set.pop(code)
+            lang_to_char_set.pop(code)
+
     lang_to_char_features = get_pared_down_chars_as_features(lang_to_pared_char_set, all_pared_chars)
+
+
     # pprint.pprint(lang_to_char_features)
 
     uriel_loaded = True
@@ -319,7 +345,7 @@ def get_lang_pared_char_sets_dists():
             cos_dist = scipy.spatial.distance.cosine(char_features1, char_features2)
             if 'e' in str(cos_dist):
                 cos_dist = 0.0
-            code_to_code_to_scorestruct[iso_code1][iso_code2].set_dist('unicode_chars', cos_dist)
+            code_to_code_to_scorestruct[iso_code1][iso_code2].set_dist('transliterable', cos_dist)
 
 
 def get_wiki_to_lang_dict():
@@ -357,6 +383,49 @@ def add_wiki_info_and_europarl(code_to_code_to_scorestruct):
                 is_europarl = '+'
             code_to_code_to_scorestruct[code1][code2].set_feat('wiki', has_wiki)
             code_to_code_to_scorestruct[code1][code2].set_feat('europarl', is_europarl)
+
+
+def get_same_alph():
+    omniglot_iso_code_to_scripts_info = get_omniglot_iso_code_to_scripts_info()
+    lang_to_script = get_lang_script_info()
+
+    for code1 in code_to_code_to_scorestruct:
+
+        if code1 in lang_to_script:
+            scripts_1 = {lang_to_script[code1].lower().capitalize()}
+            # print(code1, scripts_1)
+        elif code1 in omniglot_iso_code_to_scripts_info:
+            scripts_1 = omniglot_iso_code_to_scripts_info[code1].get_all_scripts()
+        else:
+            scripts_1 = None
+            # print('ERROR', code1)
+
+        for code2 in code_to_code_to_scorestruct[code1]:
+
+
+
+            if code2 in lang_to_script:
+                scripts_2 = {lang_to_script[code2].lower().capitalize()}
+            elif code2 in omniglot_iso_code_to_scripts_info:
+                scripts_2 = omniglot_iso_code_to_scripts_info[code2].get_all_scripts()
+                # print(code2, scripts_2)
+            else:
+                scripts_2 = None
+                # print('ERROR', code1, code2)
+
+            if scripts_1 is None or scripts_2 is None:
+                code_to_code_to_scorestruct[code1][code2].set_feat('same_alph', '0')
+
+            elif scripts_1.isdisjoint(scripts_2):
+                code_to_code_to_scorestruct[code1][code2].set_feat('same_alph', '-')
+            else:
+                # print('here')
+                code_to_code_to_scorestruct[code1][code2].set_feat('same_alph', '+')
+        #
+        # elif code1
+        # for code2 in code_to_code_to_scorestruct[code1]:
+        #     same_alph = '-'
+
 
 def read_in_bitdist():
     print('reading in bitdist')
@@ -411,6 +480,15 @@ def compute_phoible_similarity(lang1, lang2, phoneme_set1, phoneme_set2, phoneme
     return phoible_sim
 
 
+def get_phoible_similarity_unchanged():
+
+    with open('phonetics.dists', 'r') as phonetic_dist_file:
+        for line in phonetic_dist_file:
+            code1, code2, dist = line.rstrip().split('\t')
+            dist = float(dist)
+            code_to_code_to_scorestruct[code1][code2].set_dist('phonetic', dist)
+
+
 def get_phoible_similarity():
     listing = glob.glob('/auto/nlg-05/deri/gazetteer/ipa/phoneme_sets/*.set')
     phon_to_phon_to_bitdist = read_in_bitdist()
@@ -450,7 +528,7 @@ def get_phoible_similarity():
         for lang2, dist in code2_to_dist.items():
             dist = (dist - min_score) / (max_score - min_score)
             code2_to_dist[lang2] = dist
-            code_to_code_to_scorestruct[lang1][lang2].set_dist('phoible_sim', dist)
+            code_to_code_to_scorestruct[lang1][lang2].set_dist('phonetic', dist)
 
 
 def get_lang_dists():
@@ -460,14 +538,21 @@ def get_lang_dists():
     print('got named entity counts')
     get_lang_pared_char_sets_dists()
     print('got pared char distances')
-    get_omniglot_scripts()
-    print('got omniglot scripts')
 
-    get_phoible_similarity()
+    """don't get omniglot scripts!!!"""
+    # get_omniglot_scripts()
+    # print('got omniglot scripts')
 
+    # get_phoible_similarity()
+    get_phoible_similarity_unchanged()
+    #
     """features"""
     get_named_entity_counts(code_to_code_to_scorestruct)
     add_wiki_info_and_europarl(code_to_code_to_scorestruct)
+
+
+    print('getting alphabet information')
+    get_same_alph()
     avg_dict()
     #
     print_dict_to_file(DISTS_FILE)

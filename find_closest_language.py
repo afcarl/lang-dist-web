@@ -6,28 +6,27 @@ __author__ = 'aderi'
 
 import sys
 
-sys.path.append('/')
-from calc_lang_lang_dist import get_feat_attr_list, get_dist_attr_list
+sys.path.append('/auto/nlg-05/deri/gazetteer')
+from lang_lang_dist.calc_lang_lang_dist import get_feat_attr_list, get_dist_attr_list
 from iso_codes import parse_language_codes
-
-LANG_DISTS_FILE = '/users/aderi/lang.dists'
 
 extra_wiki_to_lang = {'bat-smg': 'Samogitian',
                       'be-x-old': 'Old Belarusian',
-		              'cbk-zam': 'Zamboanga Chavacano',
+                      'cbk-zam': 'Zamboanga Chavacano',
                       'eml': 'Emilian-Romagnol',
-                    'fiu-vro': 'Võro',
-                  'map-bms': 'Banyumasan Basa', 'mo': 'Moldovan', 'nah': 'Nahuatl',
-                        'nds-nl': 'Dutch Low Saxon',
+                      'fiu-vro': 'Võro',
+                      'map-bms': 'Banyumasan Basa', 'mo': 'Moldovan', 'nah': 'Nahuatl',
+                      'nds-nl': 'Dutch Low Saxon',
                       'roa-rup': 'Aromanian',
-                    'roa-tara': 'Tarantino',
-              'simple': 'Simple English',
-                    'zh-classical': 'Classical Chinese',
-         'zh-min-nan': 'Min Nan',
-          'zh-yue':'Cantonese'
-		      }
+                      'roa-tara': 'Tarantino',
+                      'simple': 'Simple English',
+                      'zh-classical': 'Classical Chinese',
+                      'zh-min-nan': 'Min Nan',
+                      'zh-yue': 'Cantonese'
+}
 
 getVar = lambda searchList, ind: [searchList[i] for i in ind]
+
 
 def parse_arguments():
     global il, sort_by, get_top, second_sort, wiki, europarl, same_alph, named_entity_count, cap_nones, print_all
@@ -63,14 +62,16 @@ def make_pretty_float(f):
     if type(f) is not float:
         return str(f)
     # if f == 1.0 or f == 0.0:
-    #     return str(f)
+    # return str(f)
     return "%0.2f" % f
+
 
 def compare_none_and_int(elem):
     if elem == 'None':
         return 100
     else:
         return elem
+
 
 if __name__ == '__main__':
     parse_arguments()
@@ -84,7 +85,7 @@ if __name__ == '__main__':
     dist_to_index = dict()
     feat_to_index = dict()
     dist_and_feat_to_index = dict()
-    with open('%s' % LANG_DISTS_FILE, 'r') as dists_file:
+    with open('/auto/nlg-05/deri/gazetteer/lang_lang_dist/lang.dists', 'r') as dists_file:
         line = dists_file.readline().rstrip().split('\t')
         for i, elem in enumerate(line):
             if elem in DIST_ATTR_LIST:
@@ -98,7 +99,7 @@ if __name__ == '__main__':
     indices_to_print = [0, 1, sort_by_index]
     named_entities_index = feat_to_index['named_entity_count']
 
-    command1 = ['grep', '^{0}\t'.format(il), LANG_DISTS_FILE]
+    command1 = ['grep', '^{0}\t'.format(il), '/auto/nlg-05/deri/gazetteer/lang_lang_dist/lang.dists']
     p1 = Popen(command1, stdout=PIPE)
     output = p1.communicate()[0].decode('utf-8').split('\n')
 
@@ -183,7 +184,6 @@ if __name__ == '__main__':
         top_output[i].insert(2, lang_name)
     names_to_print.insert(2, 'name')
     top_output.insert(0, names_to_print)
-
 
     for line in top_output:
         print('\t'.join(line))

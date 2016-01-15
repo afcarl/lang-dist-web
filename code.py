@@ -45,7 +45,7 @@ myform = form.Form(
     form.Checkbox('wikipedia', value='blah'),
     form.Checkbox('europarl', value='blah'),
     form.Checkbox('same alphabet', value='blah'),
-    form.Checkbox('print all values', value='blah'),
+    form.Checkbox('print all values', value='blah', checked=True),
     form.Button('go!', type='submit'),
 )
 

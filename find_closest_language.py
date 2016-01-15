@@ -1,4 +1,5 @@
 import argparse
+import os
 import pprint
 from subprocess import check_output, Popen, PIPE
 
@@ -7,7 +8,19 @@ __author__ = 'aderi'
 import sys
 
 sys.path.append('/auto/nlg-05/deri/gazetteer')
-from lang_lang_dist.calc_lang_lang_dist import get_feat_attr_list, get_dist_attr_list
+sys.path.append('/')
+try:
+    from lang_lang_dist.calc_lang_lang_dist import get_feat_attr_list, get_dist_attr_list
+except ImportError:
+    from calc_lang_lang_dist import get_feat_attr_list, get_dist_attr_list
+
+LANG_DISTS = '/auto/nlg-05/deri/gazetteer/lang_lang_dist/lang.dists'
+if not os.path.exists(LANG_DISTS):
+    LANG_DISTS = 'lang.dists'
+if not os.path.exists(LANG_DISTS):
+    LANG_DISTS = '/users/aderi/lang.dists'
+
+
 from iso_codes import parse_language_codes
 
 extra_wiki_to_lang = {'bat-smg': 'Samogitian',
@@ -85,7 +98,7 @@ if __name__ == '__main__':
     dist_to_index = dict()
     feat_to_index = dict()
     dist_and_feat_to_index = dict()
-    with open('/auto/nlg-05/deri/gazetteer/lang_lang_dist/lang.dists', 'r') as dists_file:
+    with open(LANG_DISTS, 'r') as dists_file:
         line = dists_file.readline().rstrip().split('\t')
         for i, elem in enumerate(line):
             if elem in DIST_ATTR_LIST:
@@ -99,7 +112,7 @@ if __name__ == '__main__':
     indices_to_print = [0, 1, sort_by_index]
     named_entities_index = feat_to_index['named_entity_count']
 
-    command1 = ['grep', '^{0}\t'.format(il), '/auto/nlg-05/deri/gazetteer/lang_lang_dist/lang.dists']
+    command1 = ['grep', '^{0}\t'.format(il), LANG_DISTS]
     p1 = Popen(command1, stdout=PIPE)
     output = p1.communicate()[0].decode('utf-8').split('\n')
 

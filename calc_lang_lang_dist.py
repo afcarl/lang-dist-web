@@ -8,13 +8,20 @@ __author__ = 'aderi'
 import sys
 
 sys.path.append('/auto/nlg-05/deri/gazetteer')
-from unicode.unicode_stats import ScriptsInfo, fancy_print, get_script_as_features, get_script_to_pared_chars, \
-    get_pared_down_chars_as_features, get_lang_to_pared_char_set, get_lang_to_pared_char_set_short, get_lang_script_info
+try:
+    from unicode.unicode_stats import ScriptsInfo, fancy_print, get_script_as_features, get_script_to_pared_chars, \
+        get_pared_down_chars_as_features, get_lang_to_pared_char_set, get_lang_to_pared_char_set_short, get_lang_script_info
+except ImportError:
+    pass
 import iso_codes.parse_language_codes
 from collections import defaultdict
 import numpy as np
-import scipy.spatial.distance
-from ipa.phoneme_features import get_lang_phoneme_set
+
+try:
+    import scipy.spatial.distance
+    from ipa.phoneme_features import get_lang_phoneme_set
+except ImportError:
+    pass
 
 
 DIST_ATTR_LIST = sorted(

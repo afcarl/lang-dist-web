@@ -111,6 +111,8 @@ if __name__ == '__main__':
     sort_by_index = dist_to_index[sort_by]
     indices_to_print = [0, 1, sort_by_index]
     named_entities_index = feat_to_index['named_entity_count']
+    same_alph_index = feat_to_index['same_alph']
+    
 
     command1 = ['grep', '^{0}\t'.format(il), LANG_DISTS]
     p1 = Popen(command1, stdout=PIPE)
@@ -125,7 +127,7 @@ if __name__ == '__main__':
         line = line.split('\t')
         for j, elem in enumerate(line):
             try:
-                if j == named_entities_index:
+                if j == named_entities_index or (j == same_alph_index and elem == '0'):
                     line[j] = int(elem)
                     # print(type(line[j]))
                 else:

@@ -1,3 +1,4 @@
+import copy
 import csv
 import glob
 import pprint
@@ -11,7 +12,8 @@ sys.path.append('/auto/nlg-05/deri/gazetteer')
 sys.path.append('/')
 try:
     from unicode.unicode_stats import ScriptsInfo, fancy_print, get_script_as_features, get_script_to_pared_chars, \
-    get_pared_down_chars_as_features, get_lang_to_pared_char_set, get_lang_to_pared_char_set_short, get_lang_script_info
+        get_pared_down_chars_as_features, get_lang_to_pared_char_set, get_lang_to_pared_char_set_short, \
+        get_lang_script_info
 except ImportError:
     pass
 
@@ -25,7 +27,6 @@ try:
 except ImportError:
     pass
 
-
 DIST_ATTR_LIST = sorted(
     ['u_composite', 'u_genetic', 'u_geo', 'u_p', 'u_s', 'avg', 'u_avg', 'transliterable', 'phonetic'])
 FEAT_ATTR_LIST = sorted(['same_alph', 'named_entity_count', 'wiki', 'europarl'])
@@ -35,8 +36,11 @@ SCRIPT_DIST_ATTR_LIST = sorted(['avg', 'transliterable'])
 SCRIPT_FEAT_ATTR_LIST = sorted(['named_entity_count'])
 SCRIPT_DISTS_FILE = 'script.dists'
 
+
 def get_dist_attr_list():
     return DIST_ATTR_LIST
+
+
 def get_feat_attr_list():
     return FEAT_ATTR_LIST
 
@@ -58,9 +62,13 @@ class ScoreStruct(object):
         vals = [self.dist_dict[key] for key in sorted(self.dist_dict.keys())]
         return vals
 
-    def get_dist_avg(self):
-        attr_vals = [x for x in self.get_dist_vals() if x is not None]
-        return sum(attr_vals) / len(attr_vals)
+    def get_dist_avg(self, ignore_attr=None):
+        if ignore_attr is None:
+            attr_vals = [x for x in self.get_dist_vals() if x is not None]
+            return sum(attr_vals) / len(attr_vals)
+        else:
+            attr_vals = [dist for key, dist in self.dist_dict.items() if dist is not None and key != ignore_attr]
+            return sum(attr_vals) / len(attr_vals)
 
     def get_feat_vals(self):
         vals = [self.feat_dict[key] for key in sorted(self.feat_dict.keys())]
@@ -92,9 +100,14 @@ class ScriptScoreStruct(object):
         vals = [self.dist_dict[key] for key in sorted(self.dist_dict.keys())]
         return vals
 
-    def get_dist_avg(self):
-        attr_vals = [x for x in self.get_dist_vals() if x is not None]
-        return sum(attr_vals) / len(attr_vals)
+    def get_dist_avg(self, ignore_attr=None):
+        if ignore_attr is None:
+            attr_vals = [x for x in self.get_dist_vals() if x is not None]
+            return sum(attr_vals) / len(attr_vals)
+        else:
+            attr_vals = [dist for key, dist in self.dist_dict.items() if dist is not None and key != ignore_attr]
+            return sum(attr_vals) / len(attr_vals)
+
 
     def get_feat_vals(self):
         vals = [self.feat_dict[key] for key in sorted(self.feat_dict.keys())]
@@ -170,11 +183,11 @@ def script_print_dict_to_file(dists_file, in_list=None, out_list=None):
                 lang_dist_file.write('{0}\t{1}\t{2}\t{3}\n'.format(code, code2, dist_string, feat_string))
 
 
-def avg_dict(feat_name='avg'):
+def avg_dict(feat_name='avg', ignore_attr=None):
     for code1 in code_to_code_to_scorestruct:
         for code2 in code_to_code_to_scorestruct[code1]:
             score_struct = code_to_code_to_scorestruct[code1][code2]
-            score_struct.set_dist(feat_name, score_struct.get_dist_avg())
+            score_struct.set_dist(feat_name, score_struct.get_dist_avg(ignore_attr))
 
 
 def avg_dict_script(feat_name='avg'):
@@ -210,7 +223,7 @@ def load_uriel(iso_set=None):
 
                     # if i > 5:
                     # break
-        # break
+                    # break
     avg_dict('u_avg')
     # print_dict()
 
@@ -291,7 +304,7 @@ def get_named_entity_counts(code_to_code_to_scorestruct):
             # for iso_code, count in code_to_ne_counts.items():
             # if iso_code in code_to_code_to_scorestruct:
             # print(count, iso_code)
-            #         for code1 in code_to_code_to_scorestruct:
+            # for code1 in code_to_code_to_scorestruct:
             #             code_to_code_to_scorestruct[code1][iso_code].set_feat('named_entity_count', str(count))
             #
             #     else:
@@ -406,11 +419,10 @@ def get_same_alph():
         elif code1 in omniglot_iso_code_to_scripts_info:
             scripts_1 = omniglot_iso_code_to_scripts_info[code1].get_all_scripts()
         else:
-            scripts_1 = None
+            continue
             # print('ERROR', code1)
 
         for code2 in code_to_code_to_scorestruct[code1]:
-
 
 
             if code2 in lang_to_script:
@@ -419,7 +431,7 @@ def get_same_alph():
                 scripts_2 = omniglot_iso_code_to_scripts_info[code2].get_all_scripts()
                 # print(code2, scripts_2)
             else:
-                scripts_2 = None
+                continue
                 # print('ERROR', code1, code2)
 
             if scripts_1 is None or scripts_2 is None:
@@ -430,10 +442,10 @@ def get_same_alph():
             else:
                 # print('here')
                 code_to_code_to_scorestruct[code1][code2].set_feat('same_alph', '+')
-        #
-        # elif code1
-        # for code2 in code_to_code_to_scorestruct[code1]:
-        #     same_alph = '-'
+                #
+                # elif code1
+                # for code2 in code_to_code_to_scorestruct[code1]:
+                # same_alph = '-'
 
 
 def read_in_bitdist():
@@ -459,13 +471,14 @@ def compute_phoible_similarity(lang1, lang2, phoneme_set1, phoneme_set2, phoneme
         max_weight = -1.0
         max_phon = ''
         for phon2 in phoneme_set2:
-            if phon1 in phon_to_phon_to_bitdist and phon2 in phon_to_phon_to_bitdist[phon1] and phon_to_phon_to_bitdist[phon1][phon2] > max_weight:
+            if phon1 in phon_to_phon_to_bitdist and phon2 in phon_to_phon_to_bitdist[phon1] and \
+                            phon_to_phon_to_bitdist[phon1][phon2] > max_weight:
                 max_weight = phon_to_phon_to_bitdist[phon1][phon2]
                 max_phon = phon2
         # max_weight = max(phon_to_phon_to_bitdist[phon1], key=phon_to_phon_to_bitdist[phon1].get)
 
         # if phon1 in phoneme_to_output:
-        #     output = phoneme_to_output[phon1]
+        # output = phoneme_to_output[phon1]
         # else:
         #     command = ['grep', '^{0}\t'.format(phon1), '/auto/nlg-05/deri/gazetteer/ipa/ipa.bitdist.table']
         #     output = check_output(command).rstrip().decode('utf-8').split('\n')
@@ -490,8 +503,7 @@ def compute_phoible_similarity(lang1, lang2, phoneme_set1, phoneme_set2, phoneme
 
 
 def get_phoible_similarity_unchanged():
-
-    with open('phonetic.dists', 'r') as phonetic_dist_file:
+    with open('phonetic.dists.clean', 'r') as phonetic_dist_file:
         phonetic_dist_file.readline()
         for line in phonetic_dist_file:
             code1, code2, dist = line.rstrip().split('\t')
@@ -499,16 +511,18 @@ def get_phoible_similarity_unchanged():
                 dist = float(dist)
                 code_to_code_to_scorestruct[code1][code2].set_dist('phonetic', dist)
 
+
 def add_unchanged(code1, code2, dist_name, dist):
     if dist != 'None':
         dist = float(dist)
         code_to_code_to_scorestruct[code1][code2].set_dist(dist_name, dist)
 
+
 def load_uriel_unchanged():
     with open('uriel.dists.clean', 'r') as uriel_dist_file:
         uriel_dist_file.readline()
         for line in uriel_dist_file:
-            code1, code2, u_avg, u_composite, u_genetic , u_geo, u_p, u_s = line.rstrip().split('\t')
+            code1, code2, u_avg, u_composite, u_genetic, u_geo, u_p, u_s = line.rstrip().split('\t')
             add_unchanged(code1, code2, 'u_avg', u_avg)
             add_unchanged(code1, code2, 'u_composite', u_composite)
             add_unchanged(code1, code2, 'u_genetic', u_genetic)
@@ -546,7 +560,6 @@ def get_phoible_similarity():
             i += 1
             phoneme_set2 = lang_to_phoible_set[lang2]
 
-
             code2_to_dist[lang2] = compute_phoible_similarity(lang1, lang2, phoneme_set1, phoneme_set2,
                                                               phoneme_to_output, phon_to_phon_to_bitdist)
 
@@ -559,30 +572,124 @@ def get_phoible_similarity():
             code_to_code_to_scorestruct[lang1][lang2].set_dist('phonetic', dist)
 
 
+def append_to_indiv_vals(code2, indices_with_none, indiv_lang, list_of_list_of_indiv_vals_1,
+                         list_of_list_of_indiv_vals_2):
+    if indiv_lang in code_to_code_to_scorestruct and code2 in code_to_code_to_scorestruct[indiv_lang]:
+        # print('indiv_lang to code2', indiv_lang, code2)
+        indiv_code_values = code_to_code_to_scorestruct[indiv_lang][code2].get_dist_vals()
+        relevant_indiv_values = [indiv_code_values[i] for i in indices_with_none]
+        # print(indiv_code_values, relevant_indiv_values)
+        for i, indiv_value in enumerate(relevant_indiv_values):
+            if indiv_value is not None:
+                list_of_list_of_indiv_vals_1[i].append(indiv_value)
+    if code2 in code_to_code_to_scorestruct and indiv_lang in code_to_code_to_scorestruct[code2]:
+        indiv_code_values = code_to_code_to_scorestruct[code2][indiv_lang].get_dist_vals()
+        relevant_indiv_values = [indiv_code_values[i] for i in indices_with_none]
+        # print(indiv_code_values, relevant_indiv_values)
+        for i, indiv_value in enumerate(relevant_indiv_values):
+            if indiv_value is not None:
+                list_of_list_of_indiv_vals_2[i].append(indiv_value)
+
+
+def get_unified_macro_lang_info():
+    macro_to_indiv = iso_codes.parse_language_codes.get_macro_to_indiv()
+    orig_codes = {key for key in code_to_code_to_scorestruct}
+    for macro_code in sorted(macro_to_indiv.keys()):
+
+        for code2 in orig_codes:
+            if macro_code in orig_codes and code2 in code_to_code_to_scorestruct[macro_code]:
+                macro_code_values = code_to_code_to_scorestruct[macro_code][code2].get_dist_vals()
+                indices_with_none = [i for i, x in enumerate(macro_code_values) if x is None]
+            else:
+                indices_with_none = [i for i, x in enumerate(DIST_ATTR_LIST)]
+            # print(macro_code_values, indices_with_none)
+
+            list_of_list_of_indiv_vals_1 = []  #create all the individual language values
+            for i in range(len(indices_with_none)):
+                list_of_list_of_indiv_vals_1.append([])
+            list_of_list_of_indiv_vals_2 = []  #create all the individual language values
+            for i in range(len(indices_with_none)):
+                list_of_list_of_indiv_vals_2.append([])
+
+            for indiv_lang in macro_to_indiv[macro_code]:
+                if code2 not in macro_to_indiv:
+                    append_to_indiv_vals(code2, indices_with_none, indiv_lang, list_of_list_of_indiv_vals_1,
+                                         list_of_list_of_indiv_vals_2)
+                else:
+                    for indiv_lang_2 in macro_to_indiv[code2]:
+                        append_to_indiv_vals(indiv_lang_2, indices_with_none, indiv_lang,
+                                             list_of_list_of_indiv_vals_1, list_of_list_of_indiv_vals_2)
+
+            # pprint.pprint(list_of_list_of_indiv_vals_1)
+            # pprint.pprint(list_of_list_of_indiv_vals_2)
+
+            avg_vals_1 = []
+            avg_vals_2 = []
+            for i, lst_1 in enumerate(list_of_list_of_indiv_vals_1):
+                lst_2 = list_of_list_of_indiv_vals_2[i]
+                if len(lst_1) == 0:
+                    avg_vals_1.append(None)
+                else:
+                    avg_vals_1.append(sum(lst_1) / len(lst_1))
+
+                if len(lst_2) == 0:
+                    avg_vals_2.append(None)
+                else:
+                    avg_vals_2.append(sum(lst_2) / len(lst_2))
+            # pprint.pprint(avg_vals_1)
+
+            for i, index_with_none in enumerate(indices_with_none):
+                avg_val_1 = avg_vals_1[i]
+                if avg_val_1 is None:
+                    continue
+                dist_attr_string = DIST_ATTR_LIST[index_with_none]
+                # print(dist_attr_string, avg_val_1)
+                code_to_code_to_scorestruct[macro_code][code2].set_dist(dist_attr_string, avg_val_1)
+
+            for i, index_with_none in enumerate(indices_with_none):
+                avg_val_2 = avg_vals_2[i]
+                if avg_val_2 is None:
+                    continue
+                dist_attr_string = DIST_ATTR_LIST[index_with_none]
+                # print(dist_attr_string, avg_val_2)
+                code_to_code_to_scorestruct[code2][macro_code].set_dist(dist_attr_string, avg_val_2)
+
+            # print('FINAL')
+            # print(macro_code, code2, code_to_code_to_scorestruct[macro_code][code2].get_dist_vals())
+            # print(code2, macro_code, code_to_code_to_scorestruct[code2][macro_code].get_dist_vals())
+
+
+
 def get_lang_dists():
     """metrics"""
     # load_uriel()
-    load_uriel_unchanged()
+    # load_uriel_unchanged()
+    print('loaded uriel')
 
-    print('got named entity counts')
     get_lang_pared_char_sets_dists()
     print('got pared char distances')
 
     """don't get omniglot scripts!!!"""
     # get_omniglot_scripts()
     # print('got omniglot scripts')
-
     # get_phoible_similarity()
+
+
     get_phoible_similarity_unchanged()
+    get_unified_macro_lang_info() #this needs to come after all other distances are created
+
     #
-    """features"""
-    get_named_entity_counts(code_to_code_to_scorestruct)
-    add_wiki_info_and_europarl(code_to_code_to_scorestruct)
+    # """features"""
+    # get_named_entity_counts(code_to_code_to_scorestruct)
+    # print('got named entity counts')
+    # #
+    # add_wiki_info_and_europarl(code_to_code_to_scorestruct)
+    #
+    #
+    # print('getting alphabet information')
+    # get_same_alph()
 
-
-    print('getting alphabet information')
-    get_same_alph()
-    avg_dict()
+    # avg_dict('avg', 'u_avg')
     #
     print_dict_to_file(DISTS_FILE)
 

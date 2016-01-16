@@ -1,11 +1,72 @@
-$def with (form, result)
+$def with (form, result, website_str, website_str_2)
+<html>
+<head>
+<style>
+#header {
+    background-color:black;
+    color:white;
+    text-align:center;
+    padding:5px;
+}
+#nav {
+    line-height:20px;
+    background-color:#eeeeee;
+    width:350px;
+    float:right;
+    text-align:left;
+    padding:0px;
+}
+#error {
+    line-height:20px;
+    background-color:#eeeeee;
+    padding:20px;
+    }
+#section {
+    width:350px;
+    float:left;
+    padding:10px;
+}
+#footer {
+    background-color:black;
+    color:white;
+    clear:both;
+    text-align:center;
+   padding:5px;
+}
+</style>
+</head>
 
-<form name="main" method="post"> 
+<body>
+<div id="header">
+<h1>Closest Language Calculator</h1>
+</div>
+
+<div id="nav">
+    metric descriptions:<br>
+<b>avg</b>: unweighted average of all metrics<br>
+<b>phonetic</b>: distance between Phoible set phonemes<br>
+<b>transliterable</b>: similarity of Unicode character names<br>
+<b>u_avg</b>: average across Uriel metrics (with "u_")<br>
+<b>u_composite</b>: composite of u_geo and u_genetic<br>
+<b>u_geo</b>: geographic distance<br>
+<b>u_genetic</b>: phylogenetic distance<br>
+<b>u_p</b>: similarity of Phoible phoneme features<br>
+<b>u_s</b>: syntax feature similarity<br>
+</div>
+
+
+
+<form name="main" method="post">
 $if not form.valid: <p class="error">Try again!</p>
 $:form.render()
 </form>
+
+    <div id="error"> $website_str <br>
+    $website_str_2 </div>
+
 <!--$:result-->
 <table>
+
 $ larger = 3
 $for c in result:
     <tr class="$loop.parity">
@@ -13,4 +74,4 @@ $for c in result:
         <td width="150">$d</td>
     </tr>
 </table>
-
+</body>

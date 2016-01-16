@@ -5,7 +5,7 @@ import web.form as form
 import sys
 
 sys.path.append('/')
-from iso_codes.parse_language_codes import get_code_to_lang, find_lang_for_code
+from iso_codes.parse_language_codes import get_code_to_lang, find_lang_for_code, find_code_for_languages
 from calc_lang_lang_dist import get_dist_attr_list
 from unidecode import unidecode
 
@@ -24,6 +24,7 @@ def get_code_lang_tuples():
         code_lang_tuples = ['{0}-{1}'.format(code.rstrip(), unidecode(code_to_lang[code.rstrip()])) for code in
                             lang_file if code.rstrip() in code_to_lang]
     # code_lang_tuples = sorted(['{0}-{1}'.format(code, unidecode(lang)) for code, lang in get_code_to_lang().items()])
+    code_lang_tuples.insert(0, '{0}-{1}'.format('code', 'lang'))
     return code_lang_tuples
 
 
@@ -34,9 +35,20 @@ def get_dist_drop_down(include_none=False):
     return dist_drop_down
 
 
+def get_set_of_known_codes():
+    set_of_known_codes = set()
+    with open('used-codes', 'r') as used_codes_file:
+        for line in used_codes_file:
+            set_of_known_codes.add(line.rstrip())
+    return set_of_known_codes
+
+SET_OF_KNOWN_CODES = get_set_of_known_codes()
+
+
 myform = form.Form(
     # form.Textbox('isocode'),
     form.Dropdown('isocode', get_code_lang_tuples()),
+    form.Textbox('OR lang name'),
     form.Dropdown('sort by', get_dist_drop_down()),
     form.Dropdown('second sort', get_dist_drop_down(True)),
     form.Textbox('# returned', form.regexp('\d*', 'Must be a digit')),
@@ -53,7 +65,7 @@ myform = form.Form(
 class index:
     def GET(self):
         f = myform()
-        return render.formtest(f, "")
+        return render.formtest(f, "", "", "")
 
     def POST(self):
         f = myform()
@@ -79,6 +91,7 @@ class index:
         # --cap_nones [CAP_NONES]
         # --named_entity_count [NAMED_ENTITY_COUNT]
         il = f['isocode'].value.split('-')[0]
+        lang_name = f['OR lang name'].value
         sort_by = f['sort by'].value
         second_sort = f['second sort'].value
         top = f['# returned'].value
@@ -89,8 +102,23 @@ class index:
         same_alph = f['same alphabet'].checked
         print_all = f['print all values'].checked
 
-        all_vars = [il, sort_by, second_sort, top, cap_nones, named_entity_count, wiki, europarl, same_alph, print_all]
+        if il == 'code' and lang_name == '':
+            return render.formtest(f, "", "Pick a language!", "")
+
+        website_str = ""
+        website_str_2 = ""
+        if il == 'code' or lang_name != '':
+
+            lang_name = str(lang_name)
+            return_code, website_str, website_str_2 = find_code_for_languages(lang_name, True, SET_OF_KNOWN_CODES)
+            il = return_code
+            if il is None:
+                return render.formtest(f, "", "Couldn\'t find any code for {0}".format(lang_name), "")
+            print return_code, website_str, website_str_2
+
+        all_vars = [il, lang_name, sort_by, second_sort, top, cap_nones, named_entity_count, wiki, europarl, same_alph, print_all]
         str_to_print = ""
+        pprint.pprint(all_vars)
         for var in all_vars:
             str_to_print += str(var) + ' '
 
@@ -120,13 +148,14 @@ class index:
             command.append('--print_all')
 
         print ' '.join(command)
+
         p1 = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         output = p1.communicate()[0].decode('utf-8').split('\n')
         output = [line.split('\t') for line in output]
 
         # return render.formtest(f, "Grrreat success! isocode: %s, wikipedia: %s, europarl: %s" % (
         #     f.d.isocode, f['wikipedia'].checked, f.d.europarl))
-        return render.formtest(f, output)
+        return render.formtest(f, output, website_str, website_str_2)
 
 
 if __name__ == "__main__":

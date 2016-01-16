@@ -798,7 +798,7 @@ bcp	Bali
 bcp	Bali (Democratic Republic of Congo)
 bcq	Bench
 bcr	Babine
-bcr	Babine-Witsuwit'en
+bcr	Babine-Witsuwiten
 bcs	Kohumono
 bct	Bendi
 bcu	Awad Bing
@@ -1549,8 +1549,8 @@ cbd	Carijona
 cbe	Chipiajes
 cbg	Chimila
 cbh	Cagua
-cbi	Cha'palaachi
 cbi	Chachi
+cbi	Chapalaachi
 cbj	Ede Cabe
 cbk	Chavacano
 cbl	Bualkhaw Chin
@@ -2815,7 +2815,6 @@ gev	Eviya
 gew	Gera
 gex	Garre
 gey	Enya
-gez	Ge'ez
 gez	Geez
 gfk	Patpatar
 gft	Gafat
@@ -3306,7 +3305,7 @@ hnj	Mong Leng
 hnj	Mong Njua
 hnj	Sichuan Miao
 hnn	Hanunoo
-hnn	Hanunó'o
+hnn	Hanunóo
 hno	Hindko, Northern
 hno	Northern Hindko
 hns	Caribbean Hindustani
@@ -3929,7 +3928,7 @@ keh	Keak
 kei	Kei
 kej	Kadar
 kek	Kekchí
-kek	Q'eqchi'
+kek	Qeqchi
 kek	Q’eqchi’
 kel	Kela
 kel	Kela (Democratic Republic of Congo)
@@ -6766,7 +6765,7 @@ onu	Unua
 onw	Nubian, Old
 onw	Old Nubian
 onx	Onin Based Pidgin
-ood	O'odham
+ood	Oodham
 ood	Tohono O'odham
 ood	Tohono O’odham
 oog	Ong
@@ -7340,7 +7339,7 @@ qua	Quapaw
 qub	Huallaga Huánuco Quechua
 qub	Quechua, Huallaga Huánuco
 quc	K'iche'
-quc	Ki'che'
+quc	Kiche
 quc	K’iche’
 quc	Quiché
 qud	Calderón Highland Quichua
@@ -7744,6 +7743,7 @@ scv	Sheni
 scw	Sha
 scx	Sicel
 sda	Toraja-Sa'dan
+sda	Toraja-Sadan
 sda	Toraja-Sa’dan
 sdb	Shabak
 sdb	Shabaki
@@ -9123,6 +9123,7 @@ und	Undetermined
 une	Uneme
 ung	Ngarinyin
 unk	& lt; & gt dialect;
+unk	&Lt;Dialekt&gt;
 unk	&lt;Dialekt&gt;
 unk	@ 6 @
 unk	@6@
@@ -9683,6 +9684,7 @@ xha	Harami
 xhc	Hunnic
 xhd	Hadrami
 xhe	Khetrani
+xho	IsiXhosa
 xho	Xhosa
 xho	isiXhosa
 xhr	Hernican
@@ -10523,6 +10525,7 @@ zty	Yatee Zapotec
 zty	Zapotec, Yatee
 zua	Zeem
 zuh	Tokano
+zul	Isizulu
 zul	Zulu
 zul	isiZulu
 zum	Kumzari

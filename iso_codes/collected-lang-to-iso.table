@@ -4,18 +4,18 @@ Western Abenaki		abe
 Acehnese	ace#Achinese	ace
 Achuar-Shiwiar	acu#Achuar-Shiwiar	acu
 Afaan Oromo	hae#Eastern Oromo	orm
-Akkadian Cuneiform script	xlu#Luwian, Cuneiform	akk
+Akkadian Cuneiform script	xlu#Luwian Cuneiform	akk
 Aklan	aka#Akan	akl
 Altay	atm#Ata	alt
 Alutiiq		ems
 Anutan	aud#Anuta	aud
 Apache	xap#Apalachee	apa
-Arabic (Algerian)	arq#Arabic, Algerian	arq
-Arabic (Egyptian)	arz#Arabic, Egyptian	arz
-Arabic (Lebanese)	apd#Arabic, Sudanese	ara
-Arabic (Modern Standard)	arb#Arabic, Standard	arb
-Arabic (Moroccan)	ary#Arabic, Moroccan	ary
-Arabic (Syrian)	aeb#Arabic, Tunisian	ara
+Arabic (Algerian)	arq#Arabic Algerian	arq
+Arabic (Egyptian)	arz#Arabic Egyptian	arz
+Arabic (Lebanese)	apd#Arabic Sudanese	ara
+Arabic (Modern Standard)	arb#Arabic Standard	arb
+Arabic (Moroccan)	ary#Arabic Moroccan	ary
+Arabic (Syrian)	aeb#Arabic Tunisian	ara
 Aramaic	xrm#Armazic	arc
 Aranese	arg#Aragonese	mis
 Arbëresh	arv#Arbore	aae
@@ -24,7 +24,7 @@ Arrernte	xer#Xerénte	aer
 Arvanitic	ava#Avaric	aat
 Assyrian / Neo-Assyrian	aii#Assyrian Neo-Aramaic	aii
 Azeri	aac#Ari	aze
-Babine-Witsuwit'en	None	bcr
+Babine-Witsuwiten	None	bcr
 Balkar	bkc#Baka	krc
 Bukhori	bhh#Bukharic	bhh
 Bundjalung	bdy#Bandjalang	bdy
@@ -32,16 +32,16 @@ Buryat	bua#Buriat	bua
 Cantonese (honji)	None	mis
 Cape Verdean Creole	hat#Haitian Creole	kea
 Central Sinama	sml#Central Sama	sml
-Cha'palaachi	cbi#Chachi	cbi
+Chapalaachi	cbi#Chachi	cbi
 Chaha	cra#Chara	mis
 Chaldean Neo-Aramaic	cld#Chaldean Neo-Aramaic	cld
 Chibemba	dhm#Dhimba	bem
 Chilambya	nim#Nilamba	lai
 Chilomwe	cjk#Chokwe	nlg
 Chimambwe	xch#Chimakum	mgr
-Chinanteco	cle#Chinantec, Lealao	cco
+Chinanteco	cle#Chinantec Lealao	cco
 Chindali	cih#Chinali	ndh
-Chinese (hanzi)	gan#Chinese, Gan	zho
+Chinese (hanzi)	gan#Chinese Gan	zho
 Chingoni	asg#Cishingini	ngo
 Chinyiha	afi#Chini	nih
 Chinyika	afi#Chini	nkt
@@ -57,7 +57,7 @@ Dawan	mcz#Mawan	aoz
 Dioula	dyu#Dyula	dyu
 Dusun	dui#Dumun	dtp
 Dzongkha (Bhutanese)	None	dzo
-Elamite Cuneiform	xlu#Luwian, Cuneiform	elx
+Elamite Cuneiform	xlu#Luwian Cuneiform	elx
 Elfdalian	ron#Moldavian	mis
 Enets	enx#Enxet	enf
 Folkspraak	frq#Forak	mis
@@ -68,13 +68,13 @@ Fula(ni)	fun#Fulniô	ful
 Futunan	fut#Futuna-Aniwa	fud
 Gallo	adl#Galo	mis
 Gandhari	mqu#Mandari	pgd
-Ge'ez	gez#Geez	gez
+Geez	gez#Geez	gez
 Genoese	ast#Leonese	mis
 Germanic languages	gsg#German Sign Language	gem
 Godoberi	gdo#Ghodoberi	gdo
 Guadeloupean Creole	gcf#Guadeloupean Creole French	gcf
 Gugadja/Kukatja	None	kuz
-Hittite Cuneiform	nei#Hittite, Neo-	hit
+Hittite Cuneiform	nei#Hittite Neo-	hit
 Hixkaryana	hix#Hixkaryána	hix
 Hotcąk	hti#Hoti	win
 Huasteco	hus#Huastec	hus
@@ -101,7 +101,7 @@ Kashtwari	kfu#Katkari	kas
 Khariboli	rop#Kriol	mis
 Khinalug	kjj#Khinalugh	kjj
 Khwarshi	khv#Khvarshi	khv
-Ki'che'	quc#K'iche'	quc
+Kiche	quc#Kiche	quc
 Kildin Sámi	sjd#Kildin Sami	sjd
 Kinyakyusa	kyc#Kyaka	nyy
 Kirundi	zza#Kirdki	run
@@ -160,23 +160,23 @@ Northern Sámi	sme#Northern Sami	sme
 Nuosu (Yi)	iii#Nuosu	iii
 Nuu-Chah-Nulth (Nootka)	nuk#Nuu-chah-nulth	nuk
 Nǁng	nut#Nung	ngh
-O'odham	ood#Tohono O'odham	ood
+Oodham	ood#Tohono Oodham	ood
 Odia	bhf#Odiai	ori
 Oji-Cree	None	ojs
 Ojibwe	oji#Ojibwa	oji
 Okinawan	inm#Minaean	ryu
 Old Javanese	ojp#Old Japanese	kaw
 Old Malay	zlm#Malay	mis
-Old Persian Cuneiform	xlu#Luwian, Cuneiform	peo
+Old Persian Cuneiform	xlu#Luwian Cuneiform	peo
 Omaha	omg#Omagua	oma
 Otomi	oti#Oti	ote
 Persian/Farsi	fas#Persian	fas
 Piedmontese	pms#Piemontese	pms
 Pite Sámi	sje#Pite Sami	sje
-Pomo (Eastern)	peb#Pomo, Eastern	peb
+Pomo (Eastern)	peb#Pomo Eastern	peb
 Porja	ppu#Papora	pcj
-Q'eqchi'	kek#Q’eqchi’	kek
-Qashqai	qxq#Qashqa'i	qxq
+Qeqchi	kek#Q’eqchi’	kek
+Qashqai	qxq#Qashqai	qxq
 Raga	ruh#Ruga	lml
 Ruthenian	qxs#Southern Qiang	mis
 Saami/Sámi	etz#Semimi	sma
@@ -195,7 +195,7 @@ Skolt Sámi	sms#Skolt Sami	sms
 Slovio	teu#Soo	mis
 Southern Sámi	sma#Southern Sami	sma
 Sulung	kle#Kulung	suv
-Sumerian Cuneiform	xlu#Luwian, Cuneiform	sux
+Sumerian Cuneiform	xlu#Luwian Cuneiform	sux
 Sunuwar	suz#Sunwar	suz
 Supyire	spp#Supyire Senoufo	spp
 Swati/Swazi	ssw#Swati	ssw
@@ -211,7 +211,7 @@ Ter Sámi	sjt#Ter Sami	sjt
 Tiriyó	tri#Trió	tri
 Toba Qom	tbv#Tobo	tob
 Tofa	hio#Tsoa	kim
-Toraja-Sa'dan	sda#Toraja-Sa'dan	sda
+Toraja-Sadan	sda#Toraja-Sadan	sda
 Torres-Strait Creole	tcs#Torres Strait Creole	tcs
 Tsez	keg#Tese	ddo
 Tshiluba	cbq#Tsucuba	lua
@@ -219,7 +219,7 @@ Tsotsil	fly#Tsotsitaal	tzo
 Tuareg	tgr#Tareng	tmh
 Tuvan	tsh#Tsuvan	tyv
 Tłı̨chǫ (Dogrib)	None	dgr
-Ugaritic Cuneiform	xlu#Luwian, Cuneiform	uga
+Ugaritic Cuneiform	xlu#Luwian Cuneiform	uga
 Ume Sámi	sju#Ume Sami	sju
 Vietnamese (chữ-nôm)	vie#Vietnamese	vie
 Waray-Waray	war#Waray-Waray	war
@@ -244,13 +244,13 @@ Akkadian Cuneiform	akk#Akkadian Cuneiform script	akk
 Ancient Berber	hbo#Ancient Hebrew	mis
 Ancient Egyptian Demotic	xzp#Ancient Zapotec	egy
 Ancient Egyptian Hieratic	arz#Egyptian Arabic	egy
-Ancient Egyptian Hieroglyphic	hlu#Luwian, Hieroglyphic	egy
+Ancient Egyptian Hieroglyphic	hlu#Luwian Hieroglyphic	egy
 Ancient Latin	xzp#Ancient Zapotec	mis
 Bamum	bcf#Bamu	bax
 Bassa (Vah)	bzw#Basa (Nigeria)	bsq
 Beitha Kukju	xub#Betta Kurumba	mis
 Borama	bbg#Barama	som
-Caroline Island Script	crb#Carib, Island	woe
+Caroline Island Script	crb#Carib Island	woe
 Carpathian Basin Rovas	rmc#Carpathian Romani	mis
 Caucasian Albanian	als#Tosk Albanian	mis
 Chữ-nôm	None	vie
@@ -264,7 +264,7 @@ Evela Akuru	None	mis
 Fraser	wae#Walser	lis
 Glagolitic	got#Gothic	chu
 Grantha	gnq#Gana	san
-Hanunó'o	hnn#Hanunoo	hnn
+Hanunóo	hnn#Hanunoo	hnn
 Inutitut	iku#Inuktitut	iku
 Khazarian Rovas	ksy#Kharia Thar	mis
 Khitan	zkt#Kitan	zkt

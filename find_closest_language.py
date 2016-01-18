@@ -5,7 +5,7 @@ from subprocess import check_output, Popen, PIPE
 import sys
 sys.path.append('/nfs/guest2/aderi/unidecode/lib/python3.4/site-packages/')
 
-import from unidecode import unidecode
+from unidecode import unidecode
 
 __author__ = 'aderi'
 

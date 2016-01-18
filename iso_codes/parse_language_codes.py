@@ -1,13 +1,13 @@
 import pprint
 import difflib
 import json
-from unidecode import unidecode
-
+import sys
 __author__ = 'aderi'
 
 import os.path
+sys.path.append('/nfs/guest2/aderi/unidecode/lib/python3.4/site-packages/')
 
-
+from unidecode import unidecode
 PATH = '../iso_codes/'
 
 if not os.path.exists(PATH):

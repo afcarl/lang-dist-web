@@ -198,8 +198,10 @@ if __name__ == '__main__':
 
     for i, line in enumerate(top_output):
         lang_name = parse_language_codes.find_lang_for_code(line[1])
-        if lang_name is None:
+        if lang_name is None and line[1] in extra_wiki_to_lang:
             lang_name = extra_wiki_to_lang[line[1]]
+        else:
+            lang_name = '??'
         top_output[i].insert(2, lang_name)
     names_to_print.insert(2, 'name')
     top_output.insert(0, names_to_print)

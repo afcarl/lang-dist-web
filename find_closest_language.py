@@ -3,13 +3,10 @@ import os
 import pprint
 from subprocess import check_output, Popen, PIPE
 import sys
-try:
-    sys.path.append('/nfs/guest2/aderi/unidecode/lib/python3.4/site-packages/')
+sys.path.append('/nfs/guest2/aderi/unidecode/lib/python3.4/site-packages/')
 
-    import unidecode
-except ImportError:
-    pass
-    
+import from unidecode import unidecode
+
 __author__ = 'aderi'
 
 # import sys

@@ -2,6 +2,7 @@ import argparse
 import os
 import pprint
 from subprocess import check_output, Popen, PIPE
+import unidecode
 
 __author__ = 'aderi'
 
@@ -201,6 +202,6 @@ if __name__ == '__main__':
     top_output.insert(0, names_to_print)
 
     for line in top_output:
-        print('\t'.join(line))
+        print(unidecode('\t'.join(line)))
 
 

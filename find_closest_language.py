@@ -2,11 +2,17 @@ import argparse
 import os
 import pprint
 from subprocess import check_output, Popen, PIPE
-import unidecode
+import sys
+try:
+    sys.path.append('/nfs/guest2/aderi/unidecode/lib/python3.4/site-packages/')
 
+    import unidecode
+except ImportError:
+    pass
+    
 __author__ = 'aderi'
 
-import sys
+# import sys
 
 sys.path.append('/auto/nlg-05/deri/gazetteer')
 sys.path.append('/')
